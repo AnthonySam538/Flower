@@ -37,8 +37,8 @@ public class FlowerForm : Form
   private System.Timers.Timer animationClock = new System.Timers.Timer(animationRate);
 
   // These will be used in drawing the dots
-  private const short radius = 4;
-  private double t = 0; //used in calculating the coordinates of each dot
+  private const short diameter = 20;
+  private double t = 0; //this is theta; it's used in calculating each dots' coordinates
   private PointF myPoint;
 
   private System.Drawing.Bitmap pointer_to_bitmap;
@@ -56,8 +56,8 @@ public class FlowerForm : Form
     exitButton.Text = "Exit";
 
     // Set up sizes
-    Width = 1600;
-    Height = Width*9/16;
+    Height = 900;
+    Width = Height*16/9;
     title.Size = new Size(Width, Height/10);
     coordinates.AutoSize = true;
 
@@ -96,7 +96,7 @@ public class FlowerForm : Form
   {
     Graphics graphics = e.Graphics;
     graphics.DrawImage(pointer_to_bitmap, 0, 0, Width, Height); //copy from bitmap to graphic surface
-    graphics.FillRectangle(Brushes.Yellow, 0, Height*9/10, Width, Height/10);
+    graphics.FillRectangle(Brushes.Yellow, 0, Height*9/10, Width, title.Height);
     base.OnPaint(e);
   }
 
@@ -122,23 +122,27 @@ public class FlowerForm : Form
   {
     Invalidate(); //call OnPaint()
 
-    coordinates.Text = "X: " + myPoint.X + "\nY: " + myPoint.Y;
+    coordinates.Text = "X: " + (myPoint.X-Width/2) + "\nY: " + (myPoint.Y-Height/2);
   }
 
   protected void update(Object sender, ElapsedEventArgs events)
   {
-    // Calculate the location of the dot
-    myPoint.X = (float)((Height/2-Height/10)*Math.Cos(2*t)*Math.Cos(t)+Width/2);
-    myPoint.Y = (float)((Height/2-Height/10)*Math.Cos(2*t)*Math.Sin(t)+Height/2);
+    if(t >= 2*Math.PI)
+    {
+      refreshClock.Stop();
+      animationClock.Stop();
+    }
+    else
+    {
+      // Calculate the location of the dot
+      myPoint.X = (float)(Width/2 + (Height/2-title.Height)*Math.Cos(2*t)*Math.Cos(t) - diameter/2);  //X(t) = 432*cos(2t)*cos(t)
+      myPoint.Y = (float)(Height/2 - (Height/2-title.Height)*Math.Cos(2*t)*Math.Sin(t) - diameter/2); //Y(t) = 432*cos(2t)*sin(t)
 
-    // Draw the dot on the bitmap
-    pointer_to_graphics.FillEllipse(Brushes.DarkOrchid, myPoint.X, myPoint.Y, 4, 4);
+      // Draw the dot on the bitmap
+      pointer_to_graphics.FillEllipse(Brushes.DarkOrchid, myPoint.X, myPoint.Y, diameter, diameter);
 
-    t += 2/Math.Sqrt(Math.Pow(((Height/2-Height/10)*-2*t*Math.Sin(2*t)*Math.Cos(t))*((Height/2-Height/10)*Math.Cos(2*t)*-Math.Sin(t)), 2) + Math.Pow(((Height/2-Height/10)*-2*t*Math.Sin(2*t)*Math.Sin(t))*((Height/2-Height/10)*Math.Cos(2*t)*Math.Cos(t)), 2)); //distance/magnitude_of_tangent_vector
+      // Increment theta
+      t += diameter/2/Math.Sqrt(Math.Pow((Height/2-title.Height)*-2*Math.Sin(2*t)*Math.Cos(t) + (Height/2-title.Height)*Math.Cos(2*t)*-1*Math.Sin(t), 2) + Math.Pow((Height/2-title.Height)*-2*Math.Sin(2*t)*Math.Sin(t) + (Height/2-title.Height)*Math.Cos(2*t)*Math.Cos(t), 2)); //distancePerTick / -||<X'(t), Y'(t)>||
+    }
   }
 }
-
-// <((Height/2-Height/10)*-2*t*Math.Sin(2t)*Math.Cos(t))*((Height/2-Height/10)*Math.Cos(2t)*-Math.Sin(t)), ((Height/2-Height/10)*-2*t*Math.Sin(2t)*Math.Sin(t))*((Height/2-Height/10)*Math.Cos(2t)*Math.Cos(t))> where x is >>> c*cos(2t)*cos(t)+c <<< and y is >>> c*cos(2t)*sin(t)+c <<<
-// x'(t) = ((Height/2-Height/10)*-2*t*Math.Sin(2t)*Math.Cos(t))*((Height/2-Height/10)*Math.Cos(2t)*-Math.Sin(t))
-// y'(t) = ((Height/2-Height/10)*-2*t*Math.Sin(2t)*Math.Sin(t))*((Height/2-Height/10)*Math.Cos(2t)*Math.Cos(t))
-// Math.Sqrt(Math.Pow(((Height/2-Height/10)*-2*t*Math.Sin(2t)*Math.Cos(t))*((Height/2-Height/10)*Math.Cos(2t)*-Math.Sin(t)), 2) + Math.Pow(((Height/2-Height/10)*-2*t*Math.Sin(2t)*Math.Sin(t))*((Height/2-Height/10)*Math.Cos(2t)*Math.Cos(t)), 2))

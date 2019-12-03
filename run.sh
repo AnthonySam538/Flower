@@ -28,7 +28,7 @@ mcs -r:System.Windows.Forms.dll -r:FlowerForm.dll -out:Flower.exe FlowerMain.cs
 echo "Display the updated list of files in the folder, now including the newly created .dll and .exe files"
 ls -l
 
-echo "Run the Falling Apples program."
+echo "Run the Flower program."
 ./Flower.exe
 
 echo "The script has terminated."
