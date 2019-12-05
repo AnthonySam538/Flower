@@ -1,4 +1,4 @@
-// Author: Anthony anthonysam538
+// Author: Anthony Sam
 // Email: anthonysam538@csu.fullerton.edu
 // Course: CPSC 223N
 // Semester: Fall 2019
@@ -6,7 +6,7 @@
 // Program Name: Flower
 
 // Name of this file: FlowerMain.cs
-// Purpose of this file:
+// Purpose of this file: Launch the form where the flower can be drawn.
 // Purpose of this entire program: This program draws a flower.
 
 // Source files in this program: FlowerForm.cs, FlowerMain.cs
@@ -17,7 +17,6 @@
 // mcs -r:System.Windows.Forms.dll -r:FlowerForm.dll -out:Flower.exe FlowerMain.cs
 // Execute (Linux shell): ./Flower.exe
 
-using System;
 using System.Windows.Forms;
 
 public class FlowerMain

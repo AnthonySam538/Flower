@@ -1,7 +1,7 @@
 # !/bin/bash
 # In the official documentation the line above always has to be the first line of any script file.
 
-# Author: Anthony anthonysam538
+# Author: Anthony Sam
 # Email: anthonysam538@csu.fullerton.edu
 # Course: CPSC 223N
 # Semester: Fall 2019
@@ -16,7 +16,7 @@ echo "First, remove any potentially outdated .dll or .exe files using the keywor
 rm *.dll
 rm *.exe
 
-echo "Display the list of the remaining source files in the terminal using the keyword ls"
+echo "Display the names of the remaining files using the keyword ls"
 ls -l
 
 echo "Compile FlowerForm.cs to create the file: FlowerForm.dll"
